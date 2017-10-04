@@ -440,13 +440,17 @@
         [self openInSystem:url];
         return NO;
     }
-    else if ((self.callbackId != nil) && isTopLevelNavigation) {
+    else if ((self.callbackId != nil) && (isTopLevelNavigation || [[url scheme] isEqualToString:@"bun2card"])) {
         // Send a loadstart event for each top-level navigation (includes redirects).
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsDictionary:@{@"type":@"loadstart", @"url":[url absoluteString]}];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+
+        if ([[url scheme] isEqualToString:@"bun2card"]) {
+            return NO;
+        }
     }
 
     return YES;

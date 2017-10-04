@@ -998,6 +998,17 @@ public class InAppBrowser extends CordovaPlugin {
                     LOG.e(LOG_TAG, "Error sending sms " + url + ":" + e.toString());
                 }
             }
+            else if (url.startsWith("bun2card:")) {
+                try {
+                    JSONObject obj = new JSONObject();
+                    obj.put("type", LOAD_START_EVENT);
+                    obj.put("url", url);
+                    sendUpdate(obj, true);
+                } catch (JSONException ex) {
+                    LOG.e(LOG_TAG, "URI passed in has caused a JSON error.");
+                }
+                return true;
+            }
             return false;
         }
 
