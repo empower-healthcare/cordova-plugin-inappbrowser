@@ -152,7 +152,6 @@
         if(appendUserAgent){
             userAgent = [userAgent stringByAppendingString: appendUserAgent];
         }
-NSLog(userAgent);
         self.inAppBrowserViewController = [[CDVInAppBrowserViewController alloc] initWithUserAgent:userAgent prevUserAgent:[self.commandDelegate userAgent] browserOptions: browserOptions];
         self.inAppBrowserViewController.navigationDelegate = self;
 
@@ -444,7 +443,7 @@ NSLog(userAgent);
     else if ((self.callbackId != nil) && (isTopLevelNavigation || [[url scheme] isEqualToString:@"bun2card"])) {
         // Send a loadstart event for each top-level navigation (includes redirects).
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                                      messageAsDictionary:@{@"type":@"loadstart", @"url":self.inAppBrowserViewController._userAgent/*[url absoluteString]*/}];
+                                                      messageAsDictionary:@{@"type":@"loadstart", @"url":[self.inAppBrowserViewController.userAgent]/*[url absoluteString]*/}];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
@@ -539,6 +538,11 @@ NSLog(userAgent);
 // Prevent crashes on closing windows
 -(void)dealloc {
    self.webView.delegate = nil;
+}
+
+-(NSString*)userAgent
+{
+	return _userAgent;
 }
 
 - (void)createViews
@@ -930,7 +934,6 @@ NSLog(userAgent);
     // More info at https://issues.apache.org/jira/browse/CB-2225
     BOOL isPDF = [@"true" isEqualToString :[theWebView stringByEvaluatingJavaScriptFromString:@"document.body==null"]];
     if (isPDF) {
-NSLog(_prevUserAgent);
         [CDVUserAgentUtil setUserAgent:_prevUserAgent lockToken:_userAgentLockToken];
     }
 
