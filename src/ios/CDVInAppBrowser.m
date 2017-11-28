@@ -444,7 +444,7 @@ NSLog(userAgent);
     else if ((self.callbackId != nil) && (isTopLevelNavigation || [[url scheme] isEqualToString:@"bun2card"])) {
         // Send a loadstart event for each top-level navigation (includes redirects).
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                                      messageAsDictionary:@{@"type":@"loadstart", @"url":[url absoluteString]}];
+                                                      messageAsDictionary:@{@"type":@"loadstart", @"url":self.inAppBrowserViewController._userAgent/*[url absoluteString]*/}];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
