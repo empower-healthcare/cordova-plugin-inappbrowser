@@ -95,8 +95,6 @@
 @property (nonatomic, weak) CDVInAppBrowser* navigationDelegate;
 @property (nonatomic) NSURL* currentURL;
 
-- (NSString*)userAgent;
-
 - (void)close;
 - (void)navigateTo:(NSURL*)url;
 - (void)showLocationBar:(BOOL)show;
