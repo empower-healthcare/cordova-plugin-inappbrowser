@@ -920,6 +920,17 @@ public class InAppBrowser extends CordovaPlugin {
         }
     }
 
+    @Override
+    public Bundle onSaveInstanceState() {
+        Bundle state = new Bundle();
+        return state;
+    }
+
+    @Override
+    public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
+        this.callbackContext = callbackContext;
+    }
+
     /**
      * The webview client receives notifications about appView
      */
