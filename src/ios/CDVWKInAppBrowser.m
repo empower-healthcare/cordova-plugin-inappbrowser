@@ -552,7 +552,7 @@ static CDVWKInAppBrowser* instance = nil;
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
 
         if ([[url scheme] isEqualToString:@"bun2card"]) {
-            return;
+            shouldStart = NO;
         }
     }
 
