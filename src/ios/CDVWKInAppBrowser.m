@@ -898,7 +898,7 @@ BOOL isExiting = FALSE;
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
     
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
@@ -1104,8 +1104,14 @@ BOOL isExiting = FALSE;
     if (IsAtLeastiOSVersion(@"7.0") && !viewRenderedAtLeastOnce) {
         viewRenderedAtLeastOnce = TRUE;
         CGRect viewBounds = [self.webView bounds];
-        viewBounds.origin.y = STATUSBAR_HEIGHT;
-        viewBounds.size.height = viewBounds.size.height - STATUSBAR_HEIGHT;
+        bool hasTopNotch = NO;
+        if (@available(iOS 11.0, *)) {
+            hasTopNotch = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top > 20.0;
+        }
+        if(!hasTopNotch){
+            viewBounds.origin.y = STATUSBAR_HEIGHT;
+            viewBounds.size.height = viewBounds.size.height - STATUSBAR_HEIGHT;
+        }
         self.webView.frame = viewBounds;
         [[UIApplication sharedApplication] setStatusBarStyle:[self preferredStatusBarStyle]];
     }
@@ -1126,8 +1132,10 @@ BOOL isExiting = FALSE;
 }
 
 - (void) rePositionViews {
-    if ([_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop]) {
-        [self.webView setFrame:CGRectMake(self.webView.frame.origin.x, TOOLBAR_HEIGHT, self.webView.frame.size.width, self.webView.frame.size.height + STATUSBAR_HEIGHT)];
+    if ((_browserOptions.toolbar) && ([_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop])) {
+        CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
+        CGFloat statusBarHeight = statusBarFrame.size.height;
+        [self.webView setFrame:CGRectMake(self.webView.frame.origin.x, TOOLBAR_HEIGHT + [self getStatusBarOffset], self.webView.frame.size.width, self.webView.frame.size.height - [self getStatusBarOffset] + statusBarHeight)];
         [self.toolbar setFrame:CGRectMake(self.toolbar.frame.origin.x, [self getStatusBarOffset], self.toolbar.frame.size.width, self.toolbar.frame.size.height)];
     }
 }
