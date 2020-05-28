@@ -1110,7 +1110,6 @@ BOOL isExiting = FALSE;
         }
         if(!hasTopNotch){
             viewBounds.origin.y = STATUSBAR_HEIGHT;
-            viewBounds.size.height = viewBounds.size.height - STATUSBAR_HEIGHT;
         }
         self.webView.frame = viewBounds;
         [[UIApplication sharedApplication] setStatusBarStyle:[self preferredStatusBarStyle]];
@@ -1135,7 +1134,7 @@ BOOL isExiting = FALSE;
     if ((_browserOptions.toolbar) && ([_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop])) {
         CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
         CGFloat statusBarHeight = statusBarFrame.size.height;
-        [self.webView setFrame:CGRectMake(self.webView.frame.origin.x, TOOLBAR_HEIGHT + [self getStatusBarOffset], self.webView.frame.size.width, self.webView.frame.size.height - [self getStatusBarOffset] + statusBarHeight)];
+        [self.webView setFrame:CGRectMake(self.webView.frame.origin.x, TOOLBAR_HEIGHT + [self getStatusBarOffset], self.webView.frame.size.width, self.webView.frame.size.height - [self getStatusBarOffset])];
         [self.toolbar setFrame:CGRectMake(self.toolbar.frame.origin.x, [self getStatusBarOffset], self.toolbar.frame.size.width, self.toolbar.frame.size.height)];
     }
 }
